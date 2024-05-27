@@ -17,6 +17,7 @@ module.exports = (sequelize, DataTypes) => {
   contact.init({
     user_id: DataTypes.INTEGER,
     contact_user_id: DataTypes.INTEGER,
+    name: DataTypes.STRING,
     deletedAt: {
       type: DataTypes.DATE,
       allowNull: true 

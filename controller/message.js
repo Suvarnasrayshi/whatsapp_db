@@ -52,7 +52,7 @@ exports.postupdatemessage = async(req,res)=>{
   }
 
 
-  exports.postdeleteconatct =async(req,res)=>{
+  exports.postdeletemessage =async(req,res)=>{
     try {
       const deleted = await message.destroy({
         where: { id: req.params.id }
@@ -66,3 +66,21 @@ exports.postupdatemessage = async(req,res)=>{
       console.log(error);
     }
   }
+
+exports.markMessageAsRead=async(req, res) =>{
+    try {
+      const { id } = req.body;
+      const [updated] = await Message.update({ is_read: 1 }, {
+        where: { id: id }
+      });
+      if (updated) {
+        const updatedMessage = await Message.findByPk(id);
+        res.status(200).json(updatedMessage);
+      } else {
+        res.status(404).json({ error: 'Message not found' });
+      }
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  }
+

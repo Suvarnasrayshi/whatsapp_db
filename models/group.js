@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       group.hasMany(models.groupmessage, { foreignKey: 'group_id'});
       group.belongsToMany(models.user, { through: 'groupuser', foreignKey: 'group_id'});
-      Group.hasMany(models.groupuser, { foreignKey: 'group_id'});
+      group.hasMany(models.groupuser, { foreignKey: 'group_id'});
     }
   }
   group.init({

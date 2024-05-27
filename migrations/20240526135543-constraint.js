@@ -3,17 +3,17 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    queryInterface.addConstraint('contacts', {
-      fields: ['user_id'],
-      type: 'foreign key',
-      name: 'custom_fkey_constraint_contact_user',
-      references: { 
-        table: 'users',
-        field: 'id'
-      },
-      onDelete: 'cascade',
-      onUpdate: 'cascade'
-    });
+    // queryInterface.addConstraint('contacts', {
+    //   fields: ['user_id'],
+    //   type: 'foreign key',
+    //   name: 'custom_fkey_constraint_contact_user',
+    //   references: { 
+    //     table: 'users',
+    //     field: 'id'
+    //   },
+    //   onDelete: 'cascade',
+    //   onUpdate: 'cascade'
+    // });
 
 
 

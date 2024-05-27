@@ -52,7 +52,7 @@ exports.postupdategroupmessage = async(req,res)=>{
   }
 
 
-  exports.postdelete =async(req,res)=>{
+  exports.postdeletegroupmessage =async(req,res)=>{
     try {
       const deleted = await groupmessage.destroy({
         where: { id: req.params.id }

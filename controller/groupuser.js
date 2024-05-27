@@ -52,10 +52,11 @@ exports.postupdategroupuser = async(req,res)=>{
   }
 
 
-  exports.postdelete =async(req,res)=>{
+  exports.postdeletegroupuser =async(req,res)=>{
+    const { user_id, group_id } = req.body;
     try {
       const deleted = await groupuser.destroy({
-        where: { id: req.params.id }
+        where: {user_id,group_id}
       });
       if (deleted) {
         res.status(204).json();

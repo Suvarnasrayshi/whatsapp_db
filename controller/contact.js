@@ -7,6 +7,7 @@ const router = express.Router();
 const bodyParser = require("body-parser");
 const { user, contact, message } = require('../models')
 app.use(bodyParser.urlencoded({ extended: true }));
+const { Op } = require("sequelize");
 
 exports.getcontact = async (req, res) => {
   // res.render('user');
@@ -25,17 +26,17 @@ exports.postcontact = async (req, res) => {
   }
 }
 
-exports.getallcontact = async(req,res)=>{
-try {
-  const users = await contact.findAll();
-      res.status(200).json(users);
-} catch (error) {
-  console.log(error);
-}
+exports.getallcontact = async (req, res) => {
+  try {
+    const users = await contact.findAll();
+    res.status(200).json(users);
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 
-exports.postupdatecontact = async(req,res)=>{
+exports.postupdatecontact = async (req, res) => {
   try {
     const updated = await contact.update(req.body, {
       where: { id: req.params.id }
@@ -49,20 +50,45 @@ exports.postupdatecontact = async(req,res)=>{
   } catch (error) {
     console.log(error);
   }
+}
+
+
+exports.postdeleteconatct = async (req, res) => {
+  try {
+    const deleted = await contact.destroy({
+      where: { id: req.params.id }
+    });
+    if (deleted) {
+      res.status(204).json();
+    } else {
+      res.status(404).json({ error: 'User not found' });
+    }
+  } catch (error) {
+    console.log(error);
   }
+};
+  exports.getsearchcontact = async (req, res) => {
+   const name = req.query
+    if (!name) {
+      return res.status(400).json({ error: "Name query parameter is required" });
+    }
+    let username =Object.values(name);
 
-
-  exports.postdeleteconatct =async(req,res)=>{
-    try {
-      const deleted = await contact.destroy({
-        where: { id: req.params.id }
+    console.log(username);
+    try{
+      const contacts = await contact.findAll({
+        where: {
+          name: {
+            [Op.like]: `%${username}%`
+          }
+        }
       });
-      if (deleted) {
-        res.status(204).json();
-      } else {
-        res.status(404).json({ error: 'User not found' });
-      }
-    } catch (error) {
-      console.log(error);
+      res.status(200).json(contacts);
+    }
+    catch(error){
+    res.status(500).json({ error: error.message });
+
     }
   }
+
+

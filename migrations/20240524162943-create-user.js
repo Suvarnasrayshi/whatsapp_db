@@ -18,7 +18,7 @@ module.exports = {
         },
       },
       phoneNumber: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         allowNull:false,
         validate: {
           notEmpty: true,
@@ -34,9 +34,9 @@ module.exports = {
       },
       password: {
         type: Sequelize.STRING,
-        validate: {
-          notEmpty: true,
-        },
+        // set(value) {
+        //   this.setDataValue('password', hash(value));
+        // },
       },
       createdAt: {
         allowNull: false,

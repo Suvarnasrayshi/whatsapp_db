@@ -5,11 +5,11 @@ const dataresult = express.Router();
 const {getuser,postuser,getalluser,postupdateuser,postdelete} = require
 ('../controller/user');
 
-const{getallcontact,getcontact,postcontact,postdeleteconatct
+const{getallcontact,getcontact,postcontact,postdeleteconatct,getsearchcontact
   ,postupdatecontact}=require('../controller/contact')
 
 
-const{getmessage,getallmessage,postdeleteconatct,postmessage
+const{getmessage,getallmessage,postmessage,postdeletemessage
   ,postupdatemessage}=require('../controller/message')
 
   dataresult.route("/user").get(getuser);
@@ -24,12 +24,13 @@ const{getmessage,getallmessage,postdeleteconatct,postmessage
   dataresult.route("/contact/:id").get(getallcontact);
   dataresult.route("/contact/:id/update").post(postupdatecontact);
   dataresult.route("/contact/:id/delete").post(postdeleteconatct);
+  dataresult.route("/search").get(getsearchcontact);
 
 
   dataresult.route("/message").get(getmessage);
   dataresult.route("/message").post(postmessage);
   dataresult.route("/message/:id").get(getallmessage);
   dataresult.route("/message/:id/update").post(postupdatemessage);
-  dataresult.route("/message/:id/delete").post(postdeleteconatct);
+  dataresult.route("/message/:id/delete").post(postdeletemessage)
 
 module.exports = dataresult;
