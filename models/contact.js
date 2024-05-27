@@ -29,3 +29,9 @@ module.exports = (sequelize, DataTypes) => {
   });
   return contact;
 };
+
+
+
+
+
+

@@ -5,7 +5,7 @@ const Sequelize = require("sequelize");
 app.set("view engine", "ejs");
 const router = express.Router();
 const bodyParser = require("body-parser");
-const { user, contact, message } = require('../models')
+const { user, contact, message,group } = require('../models')
 app.use(bodyParser.urlencoded({ extended: true }));
 const { Op } = require("sequelize");
 
@@ -17,9 +17,28 @@ exports.getcontact = async (req, res) => {
 
 exports.postcontact = async (req, res) => {
   try {
-    const userdata = await contact.create(req.body);
-
-    res.json(userdata);
+  const { user_id, contactnumber, name } = req.body;
+  console.log(req.body);
+  if(!user_id|| !contactnumber || !name){
+    return res.json({error:"provide valid details here!"})
+  }
+    const userdetail = await user.findByPk(user_id);
+    console.log(userdetail)
+    let contactuser=await user.findOne({
+      where :{
+        phoneNumber:contactnumber
+      }
+    })
+    if(!contactuser){
+      return res.json({error:"user not found"});
+    }
+    console.log("contactuser",contactuser.id)
+    const newcontact = await contact.create({
+      user_id:user_id,
+      contact_user_id:contactuser.id,
+      name:name,
+    })
+    res.status(201).json(newcontact);
   } catch (error) {
     console.error(error);
     res.status(400).json({ error: error.message });
@@ -67,28 +86,66 @@ exports.postdeleteconatct = async (req, res) => {
     console.log(error);
   }
 };
+
+
   exports.getsearchcontact = async (req, res) => {
    const name = req.query
     if (!name) {
-      return res.status(400).json({ error: "Name query parameter is required" });
+      return res.status(400).json({ error: "Name is required" });
     }
     let username =Object.values(name);
+    // let a= json.stringfy(username)
 
     console.log(username);
     try{
-      const contacts = await contact.findAll({
+      const contactname = await contact.findAll({
         where: {
-          name: {
-            [Op.like]: `%${username}%`
-          }
-        }
-      });
-      res.status(200).json(contacts);
-    }
-    catch(error){
-    res.status(500).json({ error: error.message });
+        
+            name: { [Op.like]: `%${username}%` } 
+          
+           
+        },
 
-    }
+      });
+
+      const users = await user.findAll({
+        where: 
+              { phoneNumber: { [Op.like]: `%${username}%` } },
+
+      });
+
+      // res.json({users})
+      const groups = await group.findAll({
+        where: {
+          name: { [Op.like]: `%${username}%` }
+        },
+        // include: [
+        //   {
+        //     model: user,
+        //     through: { attributes: [] }
+        //   }
+        // ]
+      });
+    // res.status(200).json(groups);
+      res.json({users,groups,contactname})
+      
+
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

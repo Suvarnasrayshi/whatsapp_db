@@ -66,3 +66,27 @@ exports.postupdategroup = async(req,res)=>{
       console.log(error);
     }
   }
+
+
+  exports.searchgroup=async(req,res)=>{
+    try {
+      const name = req.query
+      if (!name) {
+        return res.status(400).json({ error: "Group name is required" });
+      }
+      let username =Object.values(name);
+      // let a= json.stringfy(username)
+  
+      console.log(username);
+        const groupsdetail = await group.findAll({
+          where: {
+            name: {
+              [Op.like]: `%${username}%`
+            }
+          }
+        });
+        res.status(200).json(groupsdetail);
+    } catch (error) {
+      res.json({error:error})
+    }
+  }

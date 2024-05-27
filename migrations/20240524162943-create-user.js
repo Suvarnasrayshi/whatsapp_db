@@ -34,9 +34,6 @@ module.exports = {
       },
       password: {
         type: Sequelize.STRING,
-        // set(value) {
-        //   this.setDataValue('password', hash(value));
-        // },
       },
       createdAt: {
         allowNull: false,

@@ -14,5 +14,5 @@ app.use("/", dataRoutes);
 
 sequelize.sync({ force: false });
 app.listen(process.env.PORT || 3003, () => {
-  console.log("🚀 Running at Port 3003");
+  console.log("Running at Port 3003");
 });

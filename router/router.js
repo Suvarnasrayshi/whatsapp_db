@@ -12,6 +12,9 @@ const{getallcontact,getcontact,postcontact,postdeleteconatct,getsearchcontact
 const{getmessage,getallmessage,postmessage,postdeletemessage
   ,postupdatemessage}=require('../controller/message')
 
+
+const{searchgroup}=require('../controller/group')
+
   dataresult.route("/user").get(getuser);
   dataresult.route("/user").post(postuser);
   dataresult.route("/user/:id").get(getalluser);
@@ -32,5 +35,7 @@ const{getmessage,getallmessage,postmessage,postdeletemessage
   dataresult.route("/message/:id").get(getallmessage);
   dataresult.route("/message/:id/update").post(postupdatemessage);
   dataresult.route("/message/:id/delete").post(postdeletemessage)
+
+  // dataresult.route("/group/search").get(searchgroup);
 
 module.exports = dataresult;

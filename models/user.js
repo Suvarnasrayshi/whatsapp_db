@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       user.hasMany(models.contact, { foreignKey: 'contact_user_id' });
 
       user.hasMany(models.groupuser, { foreignKey: 'user_id'});
-      user.belongsToMany(models.group, { through: 'groupuser', foreignKey: 'userId'});
+      user.belongsToMany(models.group, { through: 'groupuser', foreignKey: 'user_id'});
     }
   }
   user.init({
