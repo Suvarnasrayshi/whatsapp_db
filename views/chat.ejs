@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+    <style>
+      body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 0;
+}
+
+h2 {
+    margin: 0;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    text-align: center;
+}
+
+.chat-container {
+    display: flex;
+    height: 100vh;
+}
+
+.contact-list {
+    width: 30%;
+    border-right: 1px solid #ccc;
+    overflow-y: auto;
+    background-color: #fff;
+}
+
+.contact-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.contact-list ul li {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.contact-list ul li a {
+    text-decoration: none;
+    color: #333;
+    display: block;
+}
+
+.contact-list ul li a:hover {
+    background-color: #f1f1f1;
+}
+
+.chat-window {
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-messages {
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: auto;
+    background-color: #e9ecef;
+}
+
+.message-sent,
+.message-received {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    width: fit-content;
+    max-width: 60%;
+}
+
+.message-sent {
+    background-color: #dcf8c6;
+    align-self: flex-end;
+}
+
+.message-received {
+    background-color: #fff;
+    align-self: flex-start;
+}
+
+form {
+    display: flex;
+    padding: 10px;
+    background-color: #fff;
+    border-top: 1px solid #ccc;
+}
+
+form input[type="text"] {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+form button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+form button:hover {
+    background-color: #0056b3;
+}
+
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="contact-list">
+            <h2>Contacts</h2>
+            <ul>
+                <% contacts.forEach(contact => { %>
+                    <li>
+                        <a href="/chat/<%= contact.id %>">
+                            <%= contact.username %> (<%= contact.phoneNumber %>)
+                        </a>
+                    </li>
+                <% }) %>
+            </ul>
+        </div>
+        <div class="chat-window">
+            <h2>Chat</h2>
+            <div class="chat-messages">
+                <% if (messages.length > 0) { %>
+                    <% messages.forEach(message => { %>
+                        <div class="<%= message.sender_id === user.id ? 'message-sent' : 'message-received' %>">
+                            <strong><%= message.sender_id === user.id ? 'You' : message.Sender.username %>:</strong> <%= message.content %>
+                        </div>
+                    <% }) %>
+                <% } else { %>
+                    <p>No messages yet. Start a conversation!</p>
+                <% } %>
+            </div>
+            <% if (typeof activeContact !== 'undefined') { %>
+                <form action="/send-message" method="POST">
+                    <input type="hidden" name="receiver_id" value="<%= activeContact %>">
+                    <input type="text" name="content" placeholder="Type a message..." required>
+                    <button type="submit">Send</button>
+                </form>
+            <% } %>
+        </div>
+    </div>
+</body>
+</html>

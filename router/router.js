@@ -2,7 +2,7 @@ var express = require("express");
 const bodyParser = require("body-parser");
 const dataresult = express.Router();
 
-const {getuser,postuser,getalluser,postupdateuser,postdelete} = require
+const {getuser,postuser,getalluser,postupdateuser,postdelete,postlogin} = require
 ('../controller/user');
 
 const{getallcontact,getcontact,postcontact,postdeleteconatct,getsearchcontact
@@ -15,12 +15,12 @@ const{getmessage,getallmessage,postmessage,postdeletemessage
 
 const{searchgroup}=require('../controller/group')
 
-  dataresult.route("/user").get(getuser);
+  dataresult.route("/").get(getuser);
   dataresult.route("/user").post(postuser);
   dataresult.route("/user/:id").get(getalluser);
   dataresult.route("/user/:id/update").post(postupdateuser);
   dataresult.route("/user/:id/delete").post(postdelete);
-
+  dataresult.route("/login").post(postlogin);
 
   dataresult.route("/contact").get(getcontact);
   dataresult.route("/contact").post(postcontact);

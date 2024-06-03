@@ -16,7 +16,11 @@ exports.getgroupuser = async (req, res) => {
 
 exports.postgroupuser = async (req, res) => {
   try {
-    const groupuserdata = await groupuser.create(req.body);
+    const user_id = req.user.id;
+    const groupuserdata = await groupuser.create({
+      group_id,
+      user_id:user_id,
+    });
 
     res.json(groupuserdata);
   } catch (error) {
