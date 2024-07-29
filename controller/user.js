@@ -10,7 +10,7 @@ const { user, contact, message } = require('../models')
 app.use(bodyParser.urlencoded({ extended: true }));
 
 exports.getuser = async (req, res) => {
-  res.render('registration');
+  // res.render('registration');
   // res.send("hello")
   // console.log("hello");
 }
@@ -42,7 +42,7 @@ exports.postuser = async (req, res) => {
     });
 
     const token = jwt.sign({ id: newUser.id }, 'your_secret_key', { expiresIn: '1h' });
-    res.render('login')
+    // res.render('login')
   } catch (error) {
     console.error(error);
     res.status(400).json({ error: error.message });
@@ -63,7 +63,7 @@ exports.postlogin = async (req, res) => {
     res.cookie('token', token, { httpOnly: true });
     const contacts = await user.findAll();
     
-    res.render('chat', { user: loginverify, contacts, messages: [] });
+    // res.render('chat', { user: loginverify, contacts, messages: [] });
   } catch (error) {
     console.error(error);
     res.status(400).json({ error: error.message });
