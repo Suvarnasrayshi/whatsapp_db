@@ -1,74 +1,70 @@
 const express = require("express");
 const app = express();
-const sequelize = require("../utils/database");
-const Sequelize = require("sequelize");
-app.set("view engine", "ejs");
-const router = express.Router();
 const jwt = require('jsonwebtoken');
-const bodyParser = require("body-parser");
-const { user, contact, message } = require('../models')
-app.use(bodyParser.urlencoded({ extended: true }));
+const { user,session } = require('../models')
+const bcrypt = require("bcrypt");
+const cookieParser = require("cookie-parser");
+app.use(cookieParser());
 
-exports.getuser = async (req, res) => {
-  // res.render('registration');
-  // res.send("hello")
-  // console.log("hello");
-}
-
-// exports.postuser = async (req, res) => {
-//   try {
-//     const userdata = await user.create(req.body);
-//     const token = jwt.sign({ id: userdata.id }, 'your_secret_key', { expiresIn: '1h' });
-//     res.json({ token, user: newUser });
-//     // res.json(userdata);
-//     // const contacts = await user.findAll(); // Fetch all contacts (users)
-//     // res.render('chat', { user: loggedInUser, contacts, messages: [] });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(400).json({ error: error.message });
-//   }
-// }
-
-
-
-exports.postuser = async (req, res) => {
+exports.registration = async (req, res) => {
+  
   try {
     const { username, phoneNumber, email, password } = req.body;
+    const salt = await bcrypt.genSalt(10);
+    const hashPass = await bcrypt.hash(password, salt);
     const newUser = await user.create({
-      username,
-      phoneNumber,
-      email,
-      password,
+      username:username,
+      phoneNumber:phoneNumber,
+      email:email,
+      password:hashPass,
     });
-
-    const token = jwt.sign({ id: newUser.id }, 'your_secret_key', { expiresIn: '1h' });
-    // res.render('login')
+  console.log(newUser);
+    res.json(newUser)
   } catch (error) {
     console.error(error);
     res.status(400).json({ error: error.message });
   }
 };
 
-exports.postlogin = async (req, res) => {
+exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
+    console.log(req.body)
     const loginverify = await user.findOne({ where: { email } });
-
     if (!loginverify) {
-      return res.status(401).json({ error: 'Invalid email or password' });
+      return res.status(401).json({ error: 'Invalid email' });
     }
-
+    else{
+     const newPassword=bcrypt.compare(password,loginverify.password);
+     console.log(newPassword,"password-old",password)
+     if(newPassword){
     const token = jwt.sign({ id: loginverify.id }, 'your_secret_key', { expiresIn: '1h' });
-    // res.json({ token, user: loginverify });
+    console.log("token:",token)
+    console.log("USERID",loginverify.id)
     res.cookie('token', token, { httpOnly: true });
-    const contacts = await user.findAll();
-    
-    // res.render('chat', { user: loginverify, contacts, messages: [] });
+    const getSession= await session.findOne({
+      attributes: ['id', 'userid', 'session_token', 'createdAt', 'updatedAt'],
+      where:{userid:loginverify.id},
+
+    })
+    console.log("getSession")
+    if(getSession==null){
+      const createSession=await session.create({
+        userid:loginverify.id,
+        session_token:token
+      })
+    }
+    res.json({login:loginverify,token:token})
+    }
+  }
   } catch (error) {
     console.error(error);
     res.status(400).json({ error: error.message });
   }
 };
+
+
+
 
 
 exports.getalluser = async(req,res)=>{

@@ -2,23 +2,14 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('groupusers', {
+    await queryInterface.createTable('sessions', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      group_id: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'groups',
-          key: 'id'
-        },
-        onDelete: 'CASCADE',
-        onUpdate:'CASCADE',
-      },
-      user_id: {
+      userid: {
         type: Sequelize.INTEGER,
         references: {
           model: 'users',
@@ -26,6 +17,9 @@ module.exports = {
         },
         onDelete: 'CASCADE',
         onUpdate:'CASCADE',
+      },
+      session_token: {
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,
@@ -37,11 +31,11 @@ module.exports = {
       },
       deletedAt: {
         type: Sequelize.DATE,
-        allowNull: true 
+        allowNull: true
       }
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('groupusers');
+    await queryInterface.dropTable('sessions');
   }
 };
