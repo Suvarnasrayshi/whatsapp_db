@@ -51,3 +51,35 @@ import { ref } from 'vue';
 
 </script>
 
+index.js??clonedRule…tup=true&lang=js:24 
+ POST http://localhost:3003/registration 400 (Bad Request)
+
+index.js??clonedRule…tup=true&lang=js:37 response 
+Response {type: 'cors', url: 'http://localhost:3003/registration', redirected: false, status: 400, ok: false, …}
+body
+: 
+(...)
+bodyUsed
+: 
+false
+headers
+: 
+Headers {}
+ok
+: 
+false
+redirected
+: 
+false
+status
+: 
+400
+statusText
+: 
+"Bad Request"
+type
+: 
+"cors"
+url
+: 
+"http://localhost:3003/registration"
